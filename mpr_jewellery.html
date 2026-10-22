@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>MPR JEWELLERY — Timeless Elegance • Forever Yours</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            mpr: {
+              burgundy: "#4A0E17",
+              wine: "#58111A",
+              darkWine: "#3A070F",
+              gold: "#D4AF37",
+              goldLight: "#F3E5AB",
+              champagne: "#FAF5EF",
+              cream: "#FFFDF9",
+              charcoal: "#1C1917"
+            }
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            cinzel: ['"Cinzel"', 'serif'],
+            sans: ['"Montserrat"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Montserrat', sans-serif; background-color: #FFFDF9; color: #1C1917; }
+    .font-serif { font-family: 'Playfair Display', serif; }
+    .font-cinzel { font-family: 'Cinzel', serif; }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #FAF5EF; }
+    ::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 3px; }
+  </style>
+</head>
+<body class="antialiased selection:bg-mpr-gold selection:text-mpr-darkWine">
+
+  <div id="app"></div>
+
+  <!-- Pure Native Browser Engine: Instant 0-Second Load, Zero White Screen -->
+  <script>
+    // --- 1. CURRENCIES ---
+    const CURRENCIES = {
+      INR: { symbol: '₹', rate: 1, name: 'INR (₹)' },
+      USD: { symbol: '$', rate: 83.5, name: 'USD ($)' },
+      EUR: { symbol: '€', rate: 91.0, name: 'EUR (€)' },
+      GBP: { symbol: '£', rate: 106.0, name: 'GBP (£)' },
+      AED: { symbol: 'د.إ', rate: 22.7, name: 'AED (د.إ)' }
+    };
+
+    const DEFAULT_PRODUCTS = [
+      {
+        id: "prod-1",
+        name: "Temple Necklace",
+        category: "Necklaces",
+        metal: "Gold",
+        purity: "22K (916)",
+        weight: 38.5,
+        priceINR: 45000,
+        origPriceINR: 52000,
+        discount: 13,
+        rating: 4.8,
+        reviews: 124,
+        images: [
+          "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=1000&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1000&auto=format&fit=crop"
+        ],
+        description: "Traditional temple design with intricate workmanship. A perfect blend of heritage and elegance crafted with pure 22K hallmark gold and ruby embellishments.",
+        stock: 12
+      },
+      {
+        id: "prod-2",
+        name: "Diamond Ring",
+        category: "Rings",
+        metal: "Diamond",
+        purity: "18K (VVS1)",
+        weight: 4.2,
+        priceINR: 32000,
+        origPriceINR: 38000,
+        discount: 15,
+        rating: 4.9,
+        reviews: 88,
+        images: [
+          "https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1000&auto=format&fit=crop"
+        ],
+        description: "Solitaire diamond ring featuring a sparkling central diamond surrounded by a floral halo in 18K white and yellow gold.",
+        stock: 8
+      },
+      {
+        id: "prod-3",
+        name: "Gold Bangles",
+        category: "Bangles",
+        metal: "Gold",
+        purity: "22K (916)",
+        weight: 24.0,
+        priceINR: 28000,
+        origPriceINR: 31000,
+        discount: 9,
+        rating: 4.7,
+        reviews: 95,
+        images: [
+          "https://images.unsplash.com/photo-1611591475878-5e263d91fb8e?q=80&w=1000&auto=format&fit=crop"
+        ],
+        description: "Pair of hand-carved ethnic royal gold bangles with screw clasps. Perfect for weddings and celebrations.",
+        stock: 15
+      },
+      {
+        id: "prod-4",
+        name: "Silver Earrings",
+        category: "Earrings",
+        metal: "Silver",
+        purity: "925 Pure",
+        weight: 12.8,
+        priceINR: 4500,
+        origPriceINR: 5500,
+        discount: 18,
+        rating: 4.6,
+        reviews: 62,
+        images: [
+          "https://images.unsplash.com/photo-1630019852942-f89202989a59?q=80&w=1000&auto=format&fit=crop"
+        ],
+        description: "Handcrafted 925 sterling silver jhumka earrings with antique oxidised finish and delicate pearl drop beads.",
+        stock: 22
+      }
+    ];
+
+    // State Container
+    const state = {
+      page: 'home', // 'home', 'detail', 'checkout', 'owner-login', 'owner-portal', 'auth', 'about', 'contact'
+      activeProductId: 'prod-1',
+      detailQuantity: 1,
+      currency: 'INR',
+      selectedCategory: 'All',
+      searchQuery: '',
+      dropdownOpen: false,
+      galleryModalOpen: false,
+      galleryIndex: 0,
+      cartOpen: false,
+      ownerLoggedIn: false,
+      ownerTab: 'dashboard',
+      openAccordion: 'details',
+
+      // 🌟 SECURE CREDENTIALS STORED SAFELY 🌟
+      ownerAuth: JSON.parse(localStorage.getItem('mpr_owner_auth_v5')) || {
+        email: "bhavyakthmadanambeti@gmail.com",
+        password: "bhavyakth"
+      },
+
+      store: JSON.parse(localStorage.getItem('mpr_store_v5')) || {
+        name: "MPR JEWELLERY",
+        tagline: "Timeless Elegance • Forever Yours",
+        phone: "+91 98765 43210",
+        email: "support@mprjewellery.com",
+        address: "Main Jewellers Street, MG Road, Bengaluru, India"
+      },
+
+      rates: JSON.parse(localStorage.getItem('mpr_rates_v5')) || {
+        gold22k: 6250,
+        gold24k: 6850,
+        silver1g: 78,
+        diamond1ct: 56000
+      },
+
+      upi: JSON.parse(localStorage.getItem('mpr_upi_v5')) || {
+        id: "mprjewellery@icici",
+        phone: "9876543210",
+        freeShipINR: 2000
+      },
+
+      products: JSON.parse(localStorage.getItem('mpr_products_v5')) || DEFAULT_PRODUCTS,
+
+      cart: JSON.parse(localStorage.getItem('mpr_cart_v5')) || [{ product: DEFAULT_PRODUCTS[0], qty: 1 }],
+
+      orders: JSON.parse(localStorage.getItem('mpr_orders_v5')) || [
+        {
+          id: "MPR-984210",
+          customer: "Priya Sharma",
+          phone: "9876501234",
+          address: "Flat 402, Royal Palms, MG Road, Bengaluru",
+          totalINR: 45000,
+          utr: "429182749102",
+          paymentStatus: "Pending Verification",
+          orderStatus: "Confirmed",
+          date: "Today, 10:45 AM"
+        }
+      ],
+
+      messages: JSON.parse(localStorage.getItem('mpr_messages_v5')) || []
+    };
+
+    function saveState() {
+      localStorage.setItem('mpr_owner_auth_v5', JSON.stringify(state.ownerAuth));
+      localStorage.setItem('mpr_store_v5', JSON.stringify(state.store));
+      localStorage.setItem('mpr_rates_v5', JSON.stringify(state.rates));
+      localStorage.setItem('mpr_upi_v5', JSON.stringify(state.upi));
+      localStorage.setItem('mpr_products_v5', JSON.stringify(state.products));
+      localStorage.setItem('mpr_cart_v5', JSON.stringify(state.cart));
+      localStorage.setItem('mpr_orders_v5', JSON.stringify(state.orders));
+      localStorage.setItem('mpr_messages_v5', JSON.stringify(state.messages));
+    }
+
+    function formatCur(inrAmount) {
+      const conf = CURRENCIES[state.currency] || CURRENCIES.INR;
+      if (state.currency === 'INR') {
+        return `₹${inrAmount.toLocaleString('en-IN')}`;
+      }
+      const val = (inrAmount / conf.rate).toFixed(2);
+      return `${conf.symbol}${Number(val).toLocaleString()}`;
+    }
+
+    // --- 2. RENDER ENGINE ---
+    function render() {
+      const app = document.getElementById('app');
+      if (!app) return;
+
+      if (state.page === 'owner-login') {
+        app.innerHTML = renderOwnerLogin();
+      } else if (state.page === 'owner-portal') {
+        app.innerHTML = renderOwnerPortal();
+      } else if (state.page === 'detail') {
+        app.innerHTML = renderFullPageDetail();
+      } else if (state.page === 'checkout') {
+        app.innerHTML = renderFullPageCheckout();
+      } else if (state.page === 'auth') {
+        app.innerHTML = renderCustomerAuth();
+      } else if (state.page === 'about') {
+        app.innerHTML = renderAboutPage();
+      } else if (state.page === 'contact') {
+        app.innerHTML = renderContactPage();
+      } else {
+        app.innerHTML = renderHomePage();
+      }
+    }
+
+    // --- 3. HOMEPAGE VIEW ---
+    function renderHomePage() {
+      const filtered = state.products.filter(p => {
+        const matchCat = state.selectedCategory === 'All' || p.category.toLowerCase() === state.selectedCategory.toLowerCase() || p.metal.toLowerCase() === state.selectedCategory.toLowerCase();
+        const matchSearch = p.name.toLowerCase().includes(state.searchQuery.toLowerCase());
+        return matchCat && matchSearch;
+      });
+
+      const cartCount = state.cart.reduce((sum, item) => sum + item.qty, 0);
+
+      return `
+        <!-- Top Rate Bar -->
+        <div class="bg-mpr-darkWine text-white text-[11px] sm:text-xs py-2 px-3 sm:px-4 border-b border-mpr-gold/30">
+          <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2 sm:gap-4 text-mpr-goldLight font-medium overflow-x-auto whitespace-nowrap scrollbar-none">
+              <span>🪙 Gold Rate <b class="text-white">₹${state.rates.gold22k.toLocaleString('en-IN')}/10g</b></span>
+              <span>|</span>
+              <span>🥈 Silver Rate <b class="text-white">₹${state.rates.silver1g}/1g</b></span>
+              <span class="hidden md:inline">|</span>
+              <span class="hidden md:inline">💎 Diamond Rate <b class="text-white">₹${state.rates.diamond1ct.toLocaleString('en-IN')}/ct</b></span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="hidden lg:inline text-emerald-300">🚚 Free Shipping Above ₹${state.upi.freeShipINR.toLocaleString('en-IN')}</span>
+              
+              <!-- Currency Selector -->
+              <div class="flex items-center gap-1 bg-white/10 px-2 py-0.5 rounded border border-mpr-gold/40">
+                <span class="text-[10px] text-mpr-goldLight">Currency:</span>
+                <select onchange="setCurrency(this.value)" class="bg-transparent text-white font-bold text-[10px] focus:outline-none cursor-pointer">
+                  ${Object.keys(CURRENCIES).map(c => `
+                    <option value="${c}" ${state.currency === c ? 'selected' : ''} class="bg-mpr-darkWine text-white">
+                      ${CURRENCIES[c].name}
+                    </option>
+                  `).join('')}
+                </select>
+              </div>
+
+              <button onclick="goToPage('auth')" class="hover:text-mpr-gold">Login / Sign Up</button>
+              <button onclick="toggleCart(true)" class="flex items-center gap-1 bg-mpr-burgundy px-2 py-0.5 rounded border border-mpr-gold/40">
+                <span>🛍️</span> <span class="bg-mpr-gold text-mpr-darkWine text-[10px] font-bold px-1.5 rounded-full">${cartCount}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sticky Header with Editable Store Name & Tagline -->
+        <header class="bg-white sticky top-0 z-40 shadow-sm border-b border-mpr-gold/20">
+          <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+            <div onclick="goToPage('home')" class="flex items-center gap-2.5 cursor-pointer">
+              <div class="w-10 h-10 rounded-full bg-mpr-burgundy text-mpr-gold border border-mpr-gold flex items-center justify-center text-lg shadow">👑</div>
+              <div>
+                <h1 class="font-serif tracking-widest text-2xl font-bold text-mpr-burgundy leading-none">${state.store.name}</h1>
+                <p class="text-[9px] tracking-widest font-semibold text-mpr-gold uppercase">Jewellery</p>
+                <span class="text-[8px] text-gray-400 block -mt-0.5 font-serif italic">${state.store.tagline}</span>
+              </div>
+            </div>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden lg:flex items-center gap-6 text-sm font-medium">
+              <button onclick="filterCategory('All')" class="hover:text-mpr-burgundy ${state.selectedCategory==='All'?'text-mpr-burgundy font-bold':''}">Home</button>
+              <button onclick="filterCategory('Gold')" class="hover:text-mpr-burgundy ${state.selectedCategory==='Gold'?'text-mpr-burgundy font-bold':''}">Gold</button>
+              <button onclick="filterCategory('Silver')" class="hover:text-mpr-burgundy ${state.selectedCategory==='Silver'?'text-mpr-burgundy font-bold':''}">Silver</button>
+              <button onclick="filterCategory('Diamond')" class="hover:text-mpr-burgundy ${state.selectedCategory==='Diamond'?'text-mpr-burgundy font-bold':''}">Diamond</button>
+              <button onclick="filterCategory('All')" class="hover:text-mpr-burgundy">Collections</button>
+              <button onclick="goToPage('about')" class="hover:text-mpr-burgundy">About Us</button>
+              <button onclick="goToPage('contact')" class="hover:text-mpr-burgundy">Contact</button>
+            </nav>
+
+            <!-- Search Bar -->
+            <div class="relative hidden md:block w-56">
+              <input type="text" placeholder="Search jewellery..." value="${state.searchQuery}" oninput="search(this.value)" class="w-full bg-mpr-champagne/60 border border-gray-300 rounded-full py-1.5 pl-4 pr-8 text-xs focus:outline-none focus:border-mpr-gold" />
+              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">🔍</span>
+            </div>
+
+            <!-- Actions: Header Dropdown + Owner Login -->
+            <div class="flex items-center gap-2">
+              <div class="relative">
+                <button onclick="toggleDropdown()" class="bg-mpr-champagne hover:bg-mpr-gold/20 text-mpr-burgundy px-3 py-1.5 rounded-full border border-mpr-gold text-xs font-bold transition flex items-center gap-1 shadow-sm">
+                  <span>☰ Menu</span>
+                  <span class="text-[9px]">${state.dropdownOpen ? '▲' : '▼'}</span>
+                </button>
+                ${state.dropdownOpen ? `
+                  <div class="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-mpr-gold/40 py-2 z-50 text-xs font-semibold">
+                    <div class="px-4 py-1.5 border-b text-[10px] text-mpr-gold uppercase font-bold">${state.store.name} Menu</div>
+                    <button onclick="goToPage('home')" class="w-full text-left px-4 py-2 hover:bg-mpr-champagne flex items-center gap-2 text-gray-700">🏠 Home</button>
+                    <button onclick="goToPage('owner-login')" class="w-full text-left px-4 py-2 hover:bg-mpr-burgundy hover:text-white flex items-center gap-2 text-mpr-burgundy font-bold border-y border-mpr-gold/20">🔐 Owner Login (Full Page)</button>
+                    <button onclick="filterCategory('Gold')" class="w-full text-left px-4 py-2 hover:bg-mpr-champagne flex items-center gap-2 text-gray-700">🪙 Gold</button>
+                    <button onclick="filterCategory('Silver')" class="w-full text-left px-4 py-2 hover:bg-mpr-champagne flex items-center gap-2 text-gray-700">🥈 Silver</button>
+                    <button onclick="filterCategory('Diamond')" class="w-full text-left px-4 py-2 hover:bg-mpr-champagne flex items-center gap-2 text-gray-700">💎 Diamond</button>
+                    <button onclick="goToPage('about')" class="w-full text-left px-4 py-2 hover:bg-mpr-champagne flex items-center gap-2 text-gray-700">ℹ️ About Us</button>
+                    <button onclick="goToPage('contact')" class="w-full text-left px-4 py-2 hover:bg-mpr-champagne flex items-center gap-2 text-gray-700">📞 Contact</button>
+                    <button onclick="goToPage('auth')" class="w-full text-left px-4 py-2 hover:bg-mpr-champagne flex items-center gap-2 text-mpr-burgundy font-bold border-t">👤 Sign In / Register</button>
+                  </div>
+                ` : ''}
+              </div>
+              <button onclick="goToPage('owner-login')" class="hidden sm:inline bg-mpr-darkWine text-mpr-gold px-3 py-1.5 rounded-full border border-mpr-gold text-xs font-bold shadow-sm">
+                🔐 Owner
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <!-- Hero Section with Velvet Backdrop, Diya & Temple Necklace -->
+        <div class="relative bg-gradient-to-r from-mpr-darkWine via-mpr-wine to-mpr-burgundy text-white py-10 px-4 sm:px-12 border-b border-mpr-gold/30">
+          <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 items-center gap-6 min-h-[340px]">
+            <div class="space-y-3 text-center md:text-left">
+              <span class="text-xs text-mpr-goldLight font-bold uppercase tracking-widest block">WELCOME TO ${state.store.name}</span>
+              <h2 class="text-3xl sm:text-5xl font-serif font-bold leading-tight">Crafted with Love <br><span class="text-mpr-goldLight italic">Shine for a Lifetime</span></h2>
+              <p class="text-xs sm:text-sm text-gray-200">Premium Gold • Silver • Diamond Jewellery</p>
+              <div class="pt-2">
+                <button onclick="document.getElementById('best-sellers').scrollIntoView({behavior:'smooth'})" class="bg-gradient-to-r from-mpr-gold to-yellow-500 text-mpr-darkWine font-bold px-7 py-2.5 rounded-full shadow-lg text-xs sm:text-sm">
+                  Shop Now →
+                </button>
+              </div>
+            </div>
+            <div class="flex justify-center">
+              <div class="relative w-full max-w-sm sm:max-w-md h-64 sm:h-72 rounded-2xl overflow-hidden border-2 border-mpr-gold/40 shadow-2xl">
+                <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover" />
+                <div class="absolute inset-0 bg-gradient-to-t from-mpr-darkWine/80 via-transparent to-transparent"></div>
+                <div class="absolute bottom-3 left-4 text-xs text-mpr-goldLight font-bold">Bridal Heritage Collection 2026</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 Rate Summary Cards -->
+        <div class="bg-mpr-champagne py-4 px-4 border-b border-mpr-gold/20">
+          <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+            <div class="flex flex-wrap gap-3">
+              <div class="bg-white px-4 py-2 rounded-xl shadow-sm border border-mpr-gold/40 flex items-center gap-3">
+                <span class="text-xl">🪙</span>
+                <div>
+                  <span class="text-[9px] text-gray-500 font-bold block uppercase">Gold 22K</span>
+                  <b class="text-xs text-mpr-burgundy">₹${state.rates.gold22k.toLocaleString('en-IN')}/10g</b>
+                </div>
+              </div>
+              <div class="bg-white px-4 py-2 rounded-xl shadow-sm border border-mpr-gold/40 flex items-center gap-3">
+                <span class="text-xl">🥈</span>
+                <div>
+                  <span class="text-[9px] text-gray-500 font-bold block uppercase">Silver</span>
+                  <b class="text-xs text-mpr-burgundy">₹${state.rates.silver1g}/1g</b>
+                </div>
+              </div>
+              <div class="bg-white px-4 py-2 rounded-xl shadow-sm border border-mpr-gold/40 flex items-center gap-3">
+                <span class="text-xl">💎</span>
+                <div>
+                  <span class="text-[9px] text-gray-500 font-bold block uppercase">Diamond</span>
+                  <b class="text-xs text-mpr-burgundy">₹${state.rates.diamond1ct.toLocaleString('en-IN')}/ct</b>
+                </div>
+              </div>
+            </div>
+            <div class="text-right hidden md:block">
+              <span class="text-xs uppercase font-serif tracking-widest text-mpr-gold font-bold">Pure • Elegant • Trusted</span>
+              <p class="text-[10px] text-gray-500">Your Happiness is Our Jewellery</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Circles -->
+        <div class="max-w-7xl mx-auto px-4 py-6">
+          <div class="flex items-center gap-6 overflow-x-auto pb-2 scrollbar-none">
+            <div onclick="filterCategory('All')" class="flex flex-col items-center gap-2 cursor-pointer flex-shrink-0">
+              <div class="w-14 h-14 rounded-full flex items-center justify-center text-xl border-2 ${state.selectedCategory==='All'?'bg-mpr-burgundy text-white border-mpr-gold':'bg-white text-gray-700 border-mpr-gold/40'}">🌟</div>
+              <span class="text-xs font-semibold">All Items</span>
+            </div>
+            ${['Necklaces', 'Earrings', 'Bangles', 'Rings', 'Chains', 'Pendants', 'Silver', 'Diamond'].map(cat => `
+              <div onclick="filterCategory('${cat}')" class="flex flex-col items-center gap-2 cursor-pointer flex-shrink-0">
+                <div class="w-14 h-14 rounded-full flex items-center justify-center text-xl border-2 ${state.selectedCategory===cat?'bg-mpr-burgundy text-white border-mpr-gold':'bg-white text-gray-700 border-mpr-gold/40'}">👑</div>
+                <span class="text-xs font-semibold">${cat}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Best Sellers Section -->
+        <div id="best-sellers" class="max-w-7xl mx-auto px-4 py-6 flex-1">
+          <div class="text-center mb-6">
+            <span class="text-xs text-mpr-gold font-bold uppercase tracking-widest">FEATURED COLLECTION</span>
+            <h3 class="font-serif text-2xl font-bold text-mpr-burgundy mt-1">Our Best Sellers</h3>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            ${filtered.map(p => `
+              <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col justify-between hover:shadow-md transition">
+                <div onclick="openDetail('${p.id}')" class="relative bg-mpr-darkWine h-44 overflow-hidden cursor-pointer group">
+                  <img src="${p.images[0]}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                  <span class="absolute top-2 left-2 bg-rose-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">${p.discount}% OFF</span>
+                  <span class="absolute bottom-2 right-2 bg-black/60 text-white text-[9px] px-2 py-0.5 rounded">🔍 Full Page</span>
+                </div>
+                <div class="p-3 space-y-2">
+                  <div class="flex justify-between text-[10px] text-gray-500">
+                    <span class="bg-mpr-champagne px-1.5 py-0.5 rounded text-mpr-burgundy font-bold">${p.purity}</span>
+                    <span>⭐ ${p.rating}</span>
+                  </div>
+                  <h4 onclick="openDetail('${p.id}')" class="font-serif font-bold text-xs sm:text-sm text-gray-800 hover:text-mpr-burgundy cursor-pointer truncate">${p.name}</h4>
+                  <div class="flex items-baseline gap-2">
+                    <b class="text-mpr-burgundy text-sm sm:text-base">${formatCur(p.priceINR)}</b>
+                    <span class="text-gray-400 text-xs line-through">${formatCur(p.origPriceINR)}</span>
+                  </div>
+                  <div class="pt-2 space-y-1.5 border-t border-gray-100">
+                    <button onclick="buyNowDirect('${p.id}', 1)" class="w-full bg-mpr-burgundy hover:bg-mpr-wine text-white text-xs font-bold py-2 rounded-xl transition shadow-sm">
+                      ⚡ Buy Now
+                    </button>
+                    <button onclick="addToCartItem('${p.id}', 1)" class="w-full bg-white hover:bg-mpr-champagne text-mpr-burgundy border border-mpr-burgundy/30 text-xs font-bold py-1.5 rounded-xl transition">
+                      🛒 Add to Cart
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Trust Badges & Footer -->
+        <div class="bg-white py-6 border-y border-gray-200 mt-8">
+          <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div><span class="text-2xl">🛡️</span><h5 class="font-bold text-xs text-gray-800">100% Certified</h5><p class="text-[10px] text-gray-500">BIS Hallmark & IGI Certified</p></div>
+            <div><span class="text-2xl">🔒</span><h5 class="font-bold text-xs text-gray-800">Safe & Secure</h5><p class="text-[10px] text-gray-500">Encrypted Payments</p></div>
+            <div><span class="text-2xl">🔄</span><h5 class="font-bold text-xs text-gray-800">7 Days Returns</h5><p class="text-[10px] text-gray-500">Money-back Guarantee</p></div>
+            <div><span class="text-2xl">🎧</span><h5 class="font-bold text-xs text-gray-800">24/7 Support</h5><p class="text-[10px] text-gray-500">Concierge Service</p></div>
+          </div>
+        </div>
+
+        <footer class="bg-mpr-darkWine text-white py-8 px-4 text-xs">
+          <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-6 border-b border-mpr-gold/20 pb-6">
+            <div>
+              <h4 class="font-serif text-lg font-bold text-mpr-goldLight">${state.store.name}</h4>
+              <p class="text-gray-300 text-[11px] mt-1">${state.store.tagline}</p>
+              <div class="text-[11px] text-gray-300 mt-2 space-y-0.5">
+                <div>📍 ${state.store.address}</div>
+                <div>📞 ${state.store.phone} | ✉️ ${state.store.email}</div>
+              </div>
+            </div>
+            <div>
+              <span class="text-mpr-gold font-bold uppercase block mb-1">Navigation</span>
+              <button onclick="goToPage('owner-login')" class="text-mpr-goldLight font-bold underline">🔐 Owner Login</button>
+            </div>
+          </div>
+          <div class="max-w-7xl mx-auto pt-4 text-center text-gray-400 text-[11px]">
+            © 2026 ${state.store.name}. All rights reserved.
+          </div>
+        </footer>
+
+        ${renderCartModal()}
+        ${renderGalleryModal()}
+      `;
+    }
+
+    // --- 4. FULL-PAGE ORNAMENT DETAIL VIEW ---
+    function renderFullPageDetail() {
+      const p = state.products.find(item => item.id === state.activeProductId) || state.products[0];
+      const itemTotalINR = p.priceINR * state.detailQuantity;
+      const itemOrigINR = p.origPriceINR * state.detailQuantity;
+
+      return `
+        <div class="min-h-screen bg-mpr-cream flex flex-col">
+          <div class="bg-mpr-darkWine text-white px-4 py-3 flex items-center justify-between border-b border-mpr-gold/30 sticky top-0 z-40">
+            <button onclick="goToPage('home')" class="text-xs font-bold text-mpr-goldLight hover:text-white flex items-center gap-1">
+              ← Back to Collection
+            </button>
+            <span class="font-serif font-bold text-sm text-mpr-goldLight">${state.store.name}</span>
+            <span class="text-[10px] bg-mpr-gold/20 text-mpr-gold px-2 py-0.5 rounded border border-mpr-gold/40">BIS Hallmarked</span>
+          </div>
+
+          <div class="max-w-6xl mx-auto px-4 py-8 flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+            <div class="flex flex-col-reverse sm:flex-row gap-3">
+              <div class="flex sm:flex-col gap-2">
+                ${p.images.map((img, idx) => `
+                  <img src="${img}" onclick="setDetailActiveImg(${idx})" class="w-16 h-16 object-cover rounded-xl border-2 ${idx===0?'border-mpr-gold':'border-gray-200'} cursor-pointer" />
+                `).join('')}
+              </div>
+              <div class="relative bg-mpr-darkWine flex-1 rounded-3xl overflow-hidden border-2 border-mpr-gold/40 shadow-xl">
+                <img src="${p.images[0]}" class="w-full h-80 sm:h-[450px] object-cover" />
+                <button onclick="openGallery('${p.id}', 0)" class="absolute bottom-3 right-3 bg-black/70 hover:bg-black text-white text-xs px-3.5 py-1.5 rounded-full flex items-center gap-1.5 shadow">
+                  🔍 Click to zoom (Full Screen)
+                </button>
+              </div>
+            </div>
+
+            <div class="bg-white p-6 sm:p-8 rounded-3xl border border-gray-200 shadow-md space-y-5">
+              <div>
+                <div class="text-amber-500 text-xs">★★★★★ <span class="text-gray-500">(${p.reviews} reviews)</span></div>
+                <h1 class="font-serif text-2xl sm:text-3xl font-bold text-gray-800 mt-1">${p.name}</h1>
+                <p class="text-xs text-gray-600 mt-2">${p.description}</p>
+              </div>
+
+              <div class="grid grid-cols-3 gap-3 bg-mpr-champagne/70 p-3.5 rounded-2xl border border-mpr-gold/30 text-center">
+                <div><span class="text-[10px] text-gray-500 uppercase font-bold block">Metal</span><b class="text-xs text-mpr-burgundy">${p.metal}</b></div>
+                <div><span class="text-[10px] text-gray-500 uppercase font-bold block">Weight</span><b class="text-xs text-mpr-burgundy">${p.weight}g</b></div>
+                <div><span class="text-[10px] text-gray-500 uppercase font-bold block">Purity</span><b class="text-xs text-mpr-burgundy">${p.purity}</b></div>
+              </div>
+
+              <div class="border-y border-gray-100 py-3 space-y-1">
+                <div class="flex items-baseline gap-3">
+                  <span class="text-3xl font-bold text-mpr-burgundy">${formatCur(itemTotalINR)}</span>
+                  <span class="text-sm text-gray-400 line-through">${formatCur(itemOrigINR)}</span>
+                  <span class="bg-rose-100 text-rose-700 text-xs font-bold px-2 py-0.5 rounded">${p.discount}% OFF</span>
+                </div>
+                ${state.detailQuantity > 1 ? `
+                  <p class="text-[11px] text-emerald-700 font-bold">Calculated for ${state.detailQuantity} item(s) at ${formatCur(p.priceINR)} each</p>
+                ` : ''}
+              </div>
+
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-bold text-gray-700">Select Quantity:</span>
+                <div class="flex items-center border border-mpr-gold rounded-xl overflow-hidden bg-mpr-champagne">
+                  <button onclick="changeQty(-1)" class="px-3 py-1 font-bold text-mpr-burgundy hover:bg-mpr-gold/20">-</button>
+                  <span class="px-4 py-1 text-xs font-bold bg-white">${state.detailQuantity}</span>
+                  <button onclick="changeQty(1)" class="px-3 py-1 font-bold text-mpr-burgundy hover:bg-mpr-gold/20">+</button>
+                </div>
+              </div>
+
+              <div class="space-y-2 pt-2">
+                <button onclick="buyNowDirect('${p.id}', ${state.detailQuantity})" class="w-full bg-mpr-burgundy hover:bg-mpr-wine text-white font-bold py-3.5 rounded-2xl text-xs sm:text-sm transition shadow-lg">
+                  ⚡ Buy Now (${formatCur(itemTotalINR)})
+                </button>
+                <button onclick="addToCartItem('${p.id}', ${state.detailQuantity})" class="w-full bg-white hover:bg-mpr-champagne border border-mpr-burgundy text-mpr-burgundy font-bold py-3 rounded-2xl text-xs sm:text-sm transition">
+                  🛒 Add to Cart
+                </button>
+              </div>
+
+              <div class="border-t border-gray-100 pt-3 space-y-2 text-xs">
+                <div class="border rounded-xl overflow-hidden">
+                  <button onclick="toggleAccordion('details')" class="w-full text-left p-3 font-bold bg-gray-50 flex justify-between">
+                    <span>Product Details</span><span>${state.openAccordion==='details'?'−':'+'}</span>
+                  </button>
+                  ${state.openAccordion==='details' ? `<div class="p-3 text-gray-600">Pure 22K (916) BIS Hallmarked jewellery. Net weight: ${p.weight}g.</div>` : ''}
+                </div>
+                <div class="border rounded-xl overflow-hidden">
+                  <button onclick="toggleAccordion('shipping')" class="w-full text-left p-3 font-bold bg-gray-50 flex justify-between">
+                    <span>Shipping & Delivery</span><span>${state.openAccordion==='shipping'?'−':'+'}</span>
+                  </button>
+                  ${state.openAccordion==='shipping' ? `<div class="p-3 text-gray-600">Insured express courier delivery within 3-5 business days across India.</div>` : ''}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        ${renderGalleryModal()}
+      `;
+    }
+
+    // --- 5. FULL-PAGE CHECKOUT ---
+    function renderFullPageCheckout() {
+      const subtotalINR = state.cart.reduce((sum, item) => sum + (item.product.priceINR * item.qty), 0);
+      const shipINR = subtotalINR >= state.upi.freeShipINR ? 0 : 150;
+      const totalINR = subtotalINR + shipINR;
+
+      const upiUrl = `upi://pay?pa=${encodeURIComponent(state.upi.id)}&pn=${encodeURIComponent(state.store.name)}&am=${totalINR.toFixed(2)}&cu=INR&tn=MPRJewelleryOrder`;
+      const qrApiSrc = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&color=58-17-26&data=${encodeURIComponent(upiUrl)}`;
+
+      return `
+        <div class="min-h-screen bg-mpr-champagne/40 flex flex-col justify-between">
+          <div class="bg-mpr-darkWine text-white px-4 py-3 flex items-center justify-between border-b border-mpr-gold/30">
+            <button onclick="goToPage('home')" class="text-xs text-mpr-goldLight font-bold">← Return to Store</button>
+            <span class="font-serif font-bold text-sm text-mpr-goldLight">${state.store.name} Checkout</span>
+            <span class="text-xs text-emerald-300">🔒 Secure Checkout</span>
+          </div>
+
+          <div class="max-w-xl w-full mx-auto p-4 sm:p-6 my-auto">
+            <div class="bg-white rounded-3xl shadow-xl border border-mpr-gold/40 p-6 sm:p-8 space-y-4">
+              <h3 class="font-serif font-bold text-xl text-mpr-burgundy">Payment via UPI (PhonePe, GPay, Paytm)</h3>
+
+              <div class="bg-mpr-champagne p-5 rounded-2xl border border-mpr-gold/40 text-center space-y-3 text-xs">
+                <span class="font-bold text-mpr-burgundy block text-sm">Scan QR with Any UPI App</span>
+                
+                <div class="flex justify-center">
+                  <img src="${qrApiSrc}" alt="UPI QR" class="w-44 h-44 rounded-2xl border-2 border-mpr-gold p-2 bg-white shadow" />
+                </div>
+
+                <div class="bg-white p-3 rounded-xl border border-gray-200 text-left space-y-1">
+                  <div class="flex justify-between items-center">
+                    <span class="text-gray-500">Payable in INR:</span>
+                    <b class="text-base text-mpr-burgundy">₹${totalINR.toLocaleString('en-IN')}</b>
+                  </div>
+                  ${state.currency !== 'INR' ? `
+                    <div class="text-[10px] text-gray-400">
+                      Your selected currency: ${formatCur(totalINR)} (${state.currency}) automatically converted to INR for UPI.
+                    </div>
+                  ` : ''}
+                </div>
+
+                <div class="flex items-center justify-between bg-white px-3 py-2 rounded-xl border">
+                  <span>UPI ID: <b class="text-mpr-burgundy">${state.upi.id}</b></span>
+                  <button onclick="navigator.clipboard.writeText('${state.upi.id}'); alert('Copied UPI ID!');" class="text-mpr-burgundy font-bold">
+                    Copy UPI
+                  </button>
+                </div>
+              </div>
+
+              <div class="space-y-1.5 text-xs">
+                <label class="font-bold text-gray-700 block">Enter 12-Digit UPI UTR Reference Number:</label>
+                <input type="text" id="checkout-utr" placeholder="e.g. 429182749102" class="w-full p-3 rounded-xl border border-gray-300 font-mono text-xs focus:outline-none focus:border-mpr-gold" />
+                <p class="text-[10px] text-gray-400">Submit the UTR number from your payment app. The owner verifies before dispatch.</p>
+              </div>
+
+              <button onclick="confirmOrder(${totalINR})" class="w-full bg-mpr-burgundy hover:bg-mpr-wine text-white py-3.5 rounded-2xl font-bold shadow-lg text-xs sm:text-sm">
+                Verify & Place Order
+              </button>
+            </div>
+          </div>
+
+          <div class="text-center text-xs text-gray-400 pb-4">© 2026 ${state.store.name} • 256-Bit SSL Secured</div>
+        </div>
+      `;
+    }
+
+    // --- 6. SECURE FULL-PAGE OWNER LOGIN (CREDENTIALS NOT DISPLAYED) ---
+    function renderOwnerLogin() {
+      return `
+        <div class="min-h-screen bg-gradient-to-br from-mpr-darkWine via-mpr-wine to-mpr-burgundy flex flex-col justify-between p-4 sm:p-8 text-white">
+          <div class="flex justify-between items-center max-w-5xl mx-auto w-full">
+            <span class="font-serif font-bold text-lg text-mpr-goldLight">👑 ${state.store.name}</span>
+            <button onclick="goToPage('home')" class="text-xs bg-white/10 text-mpr-goldLight px-3.5 py-1.5 rounded-full border border-mpr-gold/40">
+              ← Back to Client Store
+            </button>
+          </div>
+
+          <div class="max-w-md w-full mx-auto my-8 bg-white text-gray-800 p-6 sm:p-8 rounded-3xl shadow-2xl border-2 border-mpr-gold">
+            <div class="text-center mb-6">
+              <div class="w-16 h-16 rounded-full bg-mpr-darkWine text-mpr-gold text-2xl flex items-center justify-center mx-auto mb-2 border border-mpr-gold">🔐</div>
+              <h2 class="font-serif font-bold text-2xl text-mpr-burgundy">Owner Portal Sign In</h2>
+              <p class="text-xs text-gray-500">Sign in with your owner credentials</p>
+            </div>
+
+            <!-- Clean, Blank, Secure Form with Masked Password -->
+            <form onsubmit="handleOwnerLoginSubmit(event)" class="space-y-4 text-xs">
+              <div>
+                <label class="font-bold text-gray-700 block mb-1">Owner Email</label>
+                <input 
+                  type="email" 
+                  id="owner-email-input" 
+                  placeholder="Enter your owner email"
+                  required 
+                  class="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:border-mpr-gold" 
+                />
+              </div>
+              <div>
+                <label class="font-bold text-gray-700 block mb-1">Password</label>
+                <input 
+                  type="password" 
+                  id="owner-pass-input" 
+                  placeholder="Enter your password"
+                  required 
+                  class="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:border-mpr-gold" 
+                />
+              </div>
+              <button type="submit" class="w-full bg-mpr-burgundy hover:bg-mpr-wine text-white font-bold py-3 rounded-xl shadow-lg mt-2">
+                Enter Full Owner Portal →
+              </button>
+            </form>
+          </div>
+
+          <div class="text-center text-xs text-gray-400">© 2026 ${state.store.name} • Secure Owner Console</div>
+        </div>
+      `;
+    }
+
+    // --- 7. FULL-PAGE OWNER PORTAL ---
+    function renderOwnerPortal() {
+      return `
+        <div class="min-h-screen bg-gray-100 flex flex-col">
+          <div class="bg-mpr-darkWine text-white px-4 sm:px-6 py-3 flex justify-between items-center border-b border-mpr-gold/40">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">👑</span>
+              <div>
+                <h3 class="font-serif font-bold text-sm sm:text-base text-mpr-goldLight">${state.store.name}</h3>
+                <span class="text-[10px] text-gray-400">Full-Page Owner Console</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="goToPage('home')" class="bg-mpr-gold text-mpr-darkWine font-bold text-xs px-3 py-1.5 rounded-lg shadow flex items-center gap-1">
+                <span>🌐</span> View Website →
+              </button>
+              <button onclick="state.ownerLoggedIn=false; goToPage('home');" class="text-xs text-rose-300 border border-rose-500/40 px-2.5 py-1.5 rounded-lg">
+                Logout
+              </button>
+            </div>
+          </div>
+
+          <div class="flex-1 flex flex-col md:flex-row">
+            <!-- Sidebar -->
+            <div class="w-full md:w-64 bg-mpr-champagne border-r border-mpr-gold/30 p-3 space-y-1 text-xs font-semibold overflow-x-auto md:overflow-y-auto flex md:flex-col flex-row gap-1 md:gap-0">
+              <button onclick="setOwnerTab('dashboard')" class="w-full text-left px-3 py-2.5 rounded-xl whitespace-nowrap ${state.ownerTab==='dashboard'?'bg-mpr-burgundy text-white shadow':'hover:bg-white text-gray-700'}">📊 Dashboard</button>
+              <button onclick="setOwnerTab('products')" class="w-full text-left px-3 py-2.5 rounded-xl whitespace-nowrap ${state.ownerTab==='products'?'bg-mpr-burgundy text-white shadow':'hover:bg-white text-gray-700'}">💎 Products (${state.products.length})</button>
+              <button onclick="setOwnerTab('add_product')" class="w-full text-left px-3 py-2.5 rounded-xl whitespace-nowrap ${state.ownerTab==='add_product'?'bg-mpr-burgundy text-white shadow':'hover:bg-white text-gray-700'}">➕ Add Ornament (Gallery)</button>
+              <button onclick="setOwnerTab('orders')" class="w-full text-left px-3 py-2.5 rounded-xl whitespace-nowrap ${state.ownerTab==='orders'?'bg-mpr-burgundy text-white shadow':'hover:bg-white text-gray-700'}">📦 Orders (${state.orders.length})</button>
+              <button onclick="setOwnerTab('store_info')" class="w-full text-left px-3 py-2.5 rounded-xl whitespace-nowrap ${state.ownerTab==='store_info'?'bg-mpr-burgundy text-white shadow':'hover:bg-white text-gray-700'}">🏷️ Store & Contact Info</button>
+              <button onclick="setOwnerTab('security')" class="w-full text-left px-3 py-2.5 rounded-xl whitespace-nowrap ${state.ownerTab==='security'?'bg-mpr-burgundy text-white shadow':'hover:bg-white text-gray-700'}">🔑 Owner Credentials</button>
+              <button onclick="setOwnerTab('rates')" class="w-full text-left px-3 py-2.5 rounded-xl whitespace-nowrap ${state.ownerTab==='rates'?'bg-mpr-burgundy text-white shadow':'hover:bg-white text-gray-700'}">🪙 Gold/Silver Rates</button>
+              <button onclick="setOwnerTab('settings')" class="w-full text-left px-3 py-2.5 rounded-xl whitespace-nowrap ${state.ownerTab==='settings'?'bg-mpr-burgundy text-white shadow':'hover:bg-white text-gray-700'}">⚙️ UPI & QR Settings</button>
+            </div>
+
+            <!-- Content Area -->
+            <div class="flex-1 p-4 sm:p-8 overflow-y-auto">
+              ${renderOwnerTabContent()}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderOwnerTabContent() {
+      if (state.ownerTab === 'security') {
+        return `
+          <div class="bg-white p-6 sm:p-8 rounded-3xl border shadow-sm max-w-md space-y-4 text-xs">
+            <h3 class="font-serif font-bold text-2xl text-mpr-burgundy">Owner Login Credentials</h3>
+            <p class="text-gray-500">Update your email and password used for logging into the portal.</p>
+            <div>
+              <label class="font-bold block mb-1">Owner Email</label>
+              <input type="email" id="edit-owner-email" value="${state.ownerAuth.email}" class="w-full p-2.5 rounded-xl border" />
+            </div>
+            <div>
+              <label class="font-bold block mb-1">Owner Password</label>
+              <input type="password" id="edit-owner-pass" value="${state.ownerAuth.password}" class="w-full p-2.5 rounded-xl border" />
+            </div>
+            <button onclick="saveOwnerAuth()" class="w-full bg-mpr-burgundy text-white font-bold py-3 rounded-xl shadow">
+              Save Updated Credentials
+            </button>
+          </div>
+        `;
+      }
+
+      if (state.ownerTab === 'products') {
+        return `
+          <div class="space-y-4">
+            <div class="flex justify-between items-center">
+              <h3 class="font-serif font-bold text-2xl text-mpr-burgundy">Live Storefront Catalogue (${state.products.length})</h3>
+              <button onclick="setOwnerTab('add_product')" class="bg-mpr-burgundy text-white px-3 py-1.5 rounded-xl text-xs font-bold">➕ Add from Gallery</button>
+            </div>
+            <div class="bg-white rounded-2xl border overflow-hidden shadow-sm">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-mpr-champagne/60 border-b text-gray-600">
+                  <tr><th class="p-3">Product</th><th class="p-3">Category</th><th class="p-3">Purity</th><th class="p-3">Price</th><th class="p-3">Action</th></tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                  ${state.products.map(p => `
+                    <tr class="hover:bg-gray-50">
+                      <td class="p-3 flex items-center gap-2">
+                        <img src="${p.images[0]}" class="w-10 h-10 object-cover rounded-lg border" />
+                        <span class="font-bold">${p.name}</span>
+                      </td>
+                      <td class="p-3">${p.category}</td>
+                      <td class="p-3">${p.purity}</td>
+                      <td class="p-3 font-bold text-mpr-burgundy">₹${p.priceINR.toLocaleString('en-IN')}</td>
+                      <td class="p-3">
+                        <button onclick="deleteProduct('${p.id}')" class="text-rose-600 hover:text-rose-800 font-bold">🗑️ Delete</button>
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      }
+
+      if (state.ownerTab === 'add_product') {
+        return `
+          <div class="bg-white p-6 sm:p-8 rounded-3xl border shadow-sm max-w-xl space-y-4 text-xs">
+            <h3 class="font-serif font-bold text-2xl text-mpr-burgundy">Upload Ornament from Device Gallery</h3>
+            <p class="text-gray-500">Pick photos straight from your phone or laptop gallery.</p>
+
+            <form onsubmit="handleProductAdd(event)" class="space-y-3">
+              <div class="bg-mpr-champagne/40 p-4 rounded-2xl border-2 border-dashed border-mpr-gold text-center">
+                <input type="file" id="prod-file-input" accept="image/*" class="w-full text-xs" />
+              </div>
+              <div>
+                <label class="font-bold block mb-1">Ornament Name *</label>
+                <input type="text" id="add-prod-name" required class="w-full p-2.5 rounded-xl border" />
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="font-bold block mb-1">Category</label>
+                  <select id="add-prod-cat" class="w-full p-2.5 rounded-xl border">
+                    <option value="Necklaces">Necklaces</option><option value="Earrings">Earrings</option><option value="Bangles">Bangles</option><option value="Rings">Rings</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="font-bold block mb-1">Metal</label>
+                  <select id="add-prod-metal" class="w-full p-2.5 rounded-xl border">
+                    <option value="Gold">Gold</option><option value="Silver">Silver</option><option value="Diamond">Diamond</option>
+                  </select>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="font-bold block mb-1">Selling Price (INR ₹)</label>
+                  <input type="number" id="add-prod-price" required class="w-full p-2.5 rounded-xl border font-bold" />
+                </div>
+                <div>
+                  <label class="font-bold block mb-1">Purity</label>
+                  <input type="text" id="add-prod-purity" value="22K (916)" class="w-full p-2.5 rounded-xl border" />
+                </div>
+              </div>
+              <button type="submit" class="w-full bg-mpr-burgundy text-white font-bold py-3 rounded-xl shadow-lg mt-2">
+                Save & Publish to Client Store →
+              </button>
+            </form>
+          </div>
+        `;
+      }
+
+      if (state.ownerTab === 'store_info') {
+        return `
+          <div class="bg-white p-6 sm:p-8 rounded-3xl border shadow-sm max-w-lg space-y-4 text-xs">
+            <h3 class="font-serif font-bold text-2xl text-mpr-burgundy">Change Website Name & Contact Info</h3>
+            <div>
+              <label class="font-bold block mb-1">Website / Brand Name</label>
+              <input type="text" id="edit-store-name" value="${state.store.name}" class="w-full p-2.5 rounded-xl border font-bold" />
+            </div>
+            <div>
+              <label class="font-bold block mb-1">Tagline</label>
+              <input type="text" id="edit-store-tagline" value="${state.store.tagline}" class="w-full p-2.5 rounded-xl border" />
+            </div>
+            <div>
+              <label class="font-bold block mb-1">Store Phone Number</label>
+              <input type="text" id="edit-store-phone" value="${state.store.phone}" class="w-full p-2.5 rounded-xl border" />
+            </div>
+            <div>
+              <label class="font-bold block mb-1">Support Email</label>
+              <input type="email" id="edit-store-email" value="${state.store.email}" class="w-full p-2.5 rounded-xl border" />
+            </div>
+            <div>
+              <label class="font-bold block mb-1">Store Address</label>
+              <textarea id="edit-store-addr" rows="2" class="w-full p-2.5 rounded-xl border">${state.store.address}</textarea>
+            </div>
+            <button onclick="saveStoreInfo()" class="w-full bg-mpr-burgundy text-white font-bold py-3 rounded-xl shadow">
+              Save Store Info
+            </button>
+          </div>
+        `;
+      }
+
+      if (state.ownerTab === 'rates') {
+        return `
+          <div class="bg-white p-6 sm:p-8 rounded-3xl border shadow-sm max-w-md space-y-4 text-xs">
+            <h3 class="font-serif font-bold text-2xl text-mpr-burgundy">Live Metal Rates Manager</h3>
+            <div>
+              <label class="font-bold block mb-1">Gold 22K (per 10g in ₹)</label>
+              <input type="number" id="edit-gold22" value="${state.rates.gold22k}" class="w-full p-2.5 rounded-xl border font-bold" />
+            </div>
+            <div>
+              <label class="font-bold block mb-1">Silver (per 1g in ₹)</label>
+              <input type="number" id="edit-silver1" value="${state.rates.silver1g}" class="w-full p-2.5 rounded-xl border font-bold" />
+            </div>
+            <div>
+              <label class="font-bold block mb-1">Diamond (per Carat in ₹)</label>
+              <input type="number" id="edit-diamond1" value="${state.rates.diamond1ct}" class="w-full p-2.5 rounded-xl border font-bold" />
+            </div>
+            <button onclick="saveRates()" class="w-full bg-mpr-burgundy text-white font-bold py-3 rounded-xl shadow">
+              Publish Rates to Website
+            </button>
+          </div>
+        `;
+      }
+
+      if (state.ownerTab === 'settings') {
+        return `
+          <div class="bg-white p-6 sm:p-8 rounded-3xl border shadow-sm max-w-md space-y-4 text-xs">
+            <h3 class="font-serif font-bold text-2xl text-mpr-burgundy">UPI & QR Code Settings</h3>
+            <div>
+              <label class="font-bold block mb-1">Store UPI ID / VPA</label>
+              <input type="text" id="edit-upi-id" value="${state.upi.id}" class="w-full p-2.5 rounded-xl border font-bold text-mpr-burgundy" />
+            </div>
+            <div>
+              <label class="font-bold block mb-1">Free Shipping Above (INR ₹)</label>
+              <input type="number" id="edit-upi-freeship" value="${state.upi.freeShipINR}" class="w-full p-2.5 rounded-xl border" />
+            </div>
+            <button onclick="saveUpi()" class="w-full bg-mpr-burgundy text-white font-bold py-3 rounded-xl shadow">
+              Save UPI Settings
+            </button>
+          </div>
+        `;
+      }
+
+      // Default: Dashboard Tab
+      return `
+        <div class="space-y-6">
+          <h3 class="font-serif font-bold text-2xl text-mpr-burgundy">Owner Dashboard Overview</h3>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-white p-4 rounded-2xl border shadow-sm">
+              <span class="text-[10px] text-gray-500 uppercase font-bold block">Total Verified Sales</span>
+              <b class="text-xl text-mpr-burgundy">₹${state.orders.filter(o=>o.paymentStatus==='Paid').reduce((sum, o)=>sum+o.totalINR, 45000).toLocaleString('en-IN')}</b>
+            </div>
+            <div class="bg-white p-4 rounded-2xl border shadow-sm">
+              <span class="text-[10px] text-gray-500 uppercase font-bold block">Total Orders</span>
+              <b class="text-xl text-gray-800">${state.orders.length}</b>
+            </div>
+            <div class="bg-white p-4 rounded-2xl border shadow-sm">
+              <span class="text-[10px] text-gray-500 uppercase font-bold block">Live Ornaments</span>
+              <b class="text-xl text-gray-800">${state.products.length}</b>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // --- 8. MODALS & SUB-PAGES ---
+    function renderGalleryModal() {
+      if (!state.galleryModalOpen) return '';
+      const p = state.products.find(item => item.id === state.activeProductId) || state.products[0];
+      return `
+        <div class="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4">
+          <div class="bg-mpr-darkWine max-w-4xl w-full rounded-3xl p-4 text-white">
+            <div class="flex justify-between items-center pb-2 border-b border-mpr-gold/30 mb-3">
+              <span class="font-serif text-sm">${p.name} Gallery</span>
+              <button onclick="state.galleryModalOpen=false; render();" class="text-2xl">✕</button>
+            </div>
+            <div class="h-80 flex items-center justify-center bg-black/40 rounded-2xl mb-3 overflow-hidden">
+              <img src="${p.images[state.galleryIndex] || p.images[0]}" class="max-h-full max-w-full object-contain" />
+            </div>
+            <div class="flex gap-2 justify-center">
+              ${p.images.map((img, idx) => `
+                <img src="${img}" onclick="state.galleryIndex=${idx}; render();" class="w-14 h-14 object-cover rounded-xl border-2 ${state.galleryIndex===idx?'border-mpr-gold':'opacity-60'} cursor-pointer" />
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCartModal() {
+      if (!state.cartOpen) return '';
+      const subtotalINR = state.cart.reduce((sum, item) => sum + (item.product.priceINR * item.qty), 0);
+      return `
+        <div class="fixed inset-0 z-50 bg-black/60 flex justify-end">
+          <div class="bg-white w-full max-w-md h-full p-5 flex flex-col justify-between overflow-y-auto">
+            <div>
+              <div class="flex justify-between items-center border-b pb-3 mb-3">
+                <b class="font-serif text-mpr-burgundy">Shopping Cart (${state.cart.length})</b>
+                <button onclick="toggleCart(false)" class="text-lg">✕</button>
+              </div>
+              <div class="space-y-3">
+                ${state.cart.map((item, idx) => `
+                  <div class="flex gap-3 bg-mpr-champagne/40 p-2.5 rounded-xl border text-xs">
+                    <img src="${item.product.images[0]}" class="w-14 h-14 object-cover rounded-lg" />
+                    <div class="flex-1">
+                      <b class="block truncate">${item.product.name}</b>
+                      <span class="text-mpr-burgundy font-bold">${formatCur(item.product.priceINR * item.qty)}</span>
+                      <div class="flex items-center gap-2 mt-1">
+                        <button onclick="updateCartQty(${idx}, -1)" class="w-5 h-5 bg-gray-200 font-bold rounded">-</button>
+                        <span>${item.qty}</span>
+                        <button onclick="updateCartQty(${idx}, 1)" class="w-5 h-5 bg-gray-200 font-bold rounded">+</button>
+                        <button onclick="removeCartItem(${idx})" class="text-rose-500 ml-auto">Remove</button>
+                      </div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            <div class="border-t pt-3 space-y-2 text-xs">
+              <div class="flex justify-between"><span>Subtotal:</span><b>${formatCur(subtotalINR)}</b></div>
+              <button onclick="toggleCart(false); goToPage('checkout');" class="w-full bg-mpr-burgundy text-white font-bold py-3 rounded-xl shadow">
+                Proceed to Checkout →
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCustomerAuth() {
+      return `
+        <div class="min-h-screen bg-mpr-champagne/40 p-4 flex flex-col justify-between">
+          <div class="max-w-md w-full mx-auto my-auto bg-white p-6 sm:p-8 rounded-3xl shadow-xl border">
+            <button onclick="goToPage('home')" class="text-xs text-mpr-burgundy font-bold mb-3 block">← Back to Store</button>
+            <h3 class="font-serif font-bold text-2xl text-mpr-burgundy">Sign In to ${state.store.name}</h3>
+            <div class="space-y-3 text-xs mt-4">
+              <div><label class="font-bold block mb-1">Email or Mobile</label><input type="text" class="w-full p-2.5 rounded-xl border" /></div>
+              <div><label class="font-bold block mb-1">Password</label><input type="password" class="w-full p-2.5 rounded-xl border" /></div>
+              <button onclick="alert('Signed in!'); goToPage('home');" class="w-full bg-mpr-burgundy text-white font-bold py-3 rounded-xl shadow mt-2">Sign In</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAboutPage() {
+      return `
+        <div class="min-h-screen bg-white">
+          <div class="bg-mpr-darkWine text-white p-8 text-center">
+            <button onclick="goToPage('home')" class="text-xs underline mb-2 block mx-auto text-mpr-goldLight">← Back to Store</button>
+            <h2 class="font-serif text-3xl font-bold">${state.store.name}</h2>
+            <p class="text-xs text-mpr-goldLight mt-1">${state.store.tagline}</p>
+          </div>
+          <div class="max-w-3xl mx-auto p-6 sm:p-12 text-sm text-gray-700 leading-relaxed space-y-4">
+            <h3 class="font-serif text-2xl font-bold text-mpr-burgundy">Royal Heritage Since 1988</h3>
+            <p>Every ornament is handcrafted with 100% pure hallmarked gold, silver, and certified diamonds.</p>
+            <button onclick="goToPage('home')" class="bg-mpr-burgundy text-white font-bold px-6 py-2.5 rounded-xl text-xs">Explore Catalogue →</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderContactPage() {
+      return `
+        <div class="min-h-screen bg-mpr-champagne/40 p-4 sm:p-8">
+          <div class="max-w-xl mx-auto bg-white p-6 sm:p-8 rounded-3xl shadow-xl border">
+            <button onclick="goToPage('home')" class="text-xs text-mpr-burgundy font-bold mb-3 block">← Back to Store</button>
+            <h3 class="font-serif font-bold text-2xl text-mpr-burgundy">Contact ${state.store.name}</h3>
+            <div class="text-xs text-gray-500 mb-4 space-y-0.5">
+              <div>📍 ${state.store.address}</div>
+              <div>📞 ${state.store.phone} | ✉️ ${state.store.email}</div>
+            </div>
+            <form onsubmit="alert('Message sent to Owner!'); goToPage('home');" class="space-y-3 text-xs">
+              <div><label class="font-bold block mb-1">Your Name</label><input type="text" required class="w-full p-2.5 rounded-xl border" /></div>
+              <div><label class="font-bold block mb-1">Message</label><textarea required rows="3" class="w-full p-2.5 rounded-xl border"></textarea></div>
+              <button type="submit" class="bg-mpr-burgundy text-white font-bold px-6 py-2.5 rounded-xl">Send Inquiry</button>
+            </form>
+          </div>
+        </div>
+      `;
+    }
+
+    // --- 9. ACTION HANDLERS ---
+    window.goToPage = function(page) {
+      state.page = page;
+      state.dropdownOpen = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      render();
+    };
+
+    window.filterCategory = function(cat) {
+      state.selectedCategory = cat;
+      state.page = 'home';
+      state.dropdownOpen = false;
+      render();
+    };
+
+    window.search = function(val) {
+      state.searchQuery = val;
+      render();
+    };
+
+    window.setCurrency = function(c) {
+      state.currency = c;
+      render();
+    };
+
+    window.toggleDropdown = function() {
+      state.dropdownOpen = !state.dropdownOpen;
+      render();
+    };
+
+    window.toggleCart = function(isOpen) {
+      state.cartOpen = isOpen;
+      render();
+    };
+
+    window.openDetail = function(id) {
+      state.activeProductId = id;
+      state.detailQuantity = 1;
+      state.page = 'detail';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      render();
+    };
+
+    window.changeQty = function(delta) {
+      state.detailQuantity = Math.max(1, state.detailQuantity + delta);
+      render();
+    };
+
+    window.toggleAccordion = function(acc) {
+      state.openAccordion = state.openAccordion === acc ? '' : acc;
+      render();
+    };
+
+    window.openGallery = function(prodId, idx) {
+      state.activeProductId = prodId;
+      state.galleryIndex = idx;
+      state.galleryModalOpen = true;
+      render();
+    };
+
+    window.addToCartItem = function(id, qty) {
+      const p = state.products.find(item => item.id === id);
+      if (!p) return;
+      const exist = state.cart.find(c => c.product.id === id);
+      if (exist) exist.qty += qty;
+      else state.cart.push({ product: p, qty });
+      saveState();
+      alert(`Added ${qty} item(s) to Cart!`);
+      render();
+    };
+
+    window.buyNowDirect = function(id, qty) {
+      const p = state.products.find(item => item.id === id);
+      if (!p) return;
+      state.cart = [{ product: p, qty }];
+      saveState();
+      goToPage('checkout');
+    };
+
+    window.updateCartQty = function(idx, delta) {
+      if (state.cart[idx]) {
+        state.cart[idx].qty = Math.max(1, state.cart[idx].qty + delta);
+        saveState();
+        render();
+      }
+    };
+
+    window.removeCartItem = function(idx) {
+      state.cart.splice(idx, 1);
+      saveState();
+      render();
+    };
+
+    window.confirmOrder = function(totalINR) {
+      const utr = document.getElementById('checkout-utr')?.value;
+      if (!utr || utr.length < 6) {
+        alert('Please enter your 12-digit UPI UTR Number from your payment app.');
+        return;
+      }
+      const order = {
+        id: "MPR-" + Math.floor(100000 + Math.random() * 900000),
+        customer: "Customer",
+        totalINR,
+        utr,
+        paymentStatus: "Pending Verification",
+        orderStatus: "Confirmed",
+        date: "Just Now"
+      };
+      state.orders.unshift(order);
+      state.cart = [];
+      saveState();
+      alert(`Order Placed Successfully!\nOrder ID: ${order.id}\nThe owner will verify the transaction.`);
+      goToPage('home');
+    };
+
+    // 🌟 SECURE LOGIN VALIDATION WITHOUT EXPOSING CREDENTIALS 🌟
+    window.handleOwnerLoginSubmit = function(e) {
+      e.preventDefault();
+      const email = document.getElementById('owner-email-input')?.value.trim();
+      const pass = document.getElementById('owner-pass-input')?.value.trim();
+      
+      if (email.toLowerCase() === state.ownerAuth.email.toLowerCase() && pass === state.ownerAuth.password) {
+        state.ownerLoggedIn = true;
+        goToPage('owner-portal');
+      } else {
+        alert('Invalid email or password. Please verify your credentials and try again.');
+      }
+    };
+
+    window.setOwnerTab = function(t) {
+      state.ownerTab = t;
+      render();
+    };
+
+    window.deleteProduct = function(id) {
+      state.products = state.products.filter(p => p.id !== id);
+      saveState();
+      render();
+    };
+
+    window.handleProductAdd = function(e) {
+      e.preventDefault();
+      const fileInput = document.getElementById('prod-file-input');
+      const name = document.getElementById('add-prod-name')?.value;
+      const cat = document.getElementById('add-prod-cat')?.value;
+      const metal = document.getElementById('add-prod-metal')?.value;
+      const price = Number(document.getElementById('add-prod-price')?.value);
+      const purity = document.getElementById('add-prod-purity')?.value;
+
+      const finishAdd = (imgSrc) => {
+        const newP = {
+          id: "prod-" + Date.now(),
+          name,
+          category: cat,
+          metal,
+          purity,
+          weight: 20,
+          priceINR: price,
+          origPriceINR: Math.round(price * 1.15),
+          discount: 13,
+          rating: 5.0,
+          reviews: 1,
+          images: [imgSrc],
+          description: "Exclusive jewellery crafted from pure hallmark metal.",
+          stock: 10
+        };
+        state.products.unshift(newP);
+        saveState();
+        alert(`Ornament "${name}" uploaded from gallery and saved in store!`);
+        state.ownerTab = 'products';
+        render();
+      };
+
+      if (fileInput?.files[0]) {
+        const reader = new FileReader();
+        reader.onloadend = () => finishAdd(reader.result);
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        finishAdd("https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=1000&auto=format&fit=crop");
+      }
+    };
+
+    window.saveStoreInfo = function() {
+      state.store.name = document.getElementById('edit-store-name').value;
+      state.store.tagline = document.getElementById('edit-store-tagline').value;
+      state.store.phone = document.getElementById('edit-store-phone').value;
+      state.store.email = document.getElementById('edit-store-email').value;
+      state.store.address = document.getElementById('edit-store-addr').value;
+      saveState();
+      alert('Store info updated live across the website!');
+      render();
+    };
+
+    window.saveOwnerAuth = function() {
+      const email = document.getElementById('edit-owner-email').value.trim();
+      const pass = document.getElementById('edit-owner-pass').value.trim();
+      if (!email || !pass) {
+        alert('Email and password cannot be empty!');
+        return;
+      }
+      state.ownerAuth.email = email;
+      state.ownerAuth.password = pass;
+      saveState();
+      alert('Owner credentials updated successfully! Use your new credentials next time you log in.');
+      render();
+    };
+
+    window.saveRates = function() {
+      state.rates.gold22k = Number(document.getElementById('edit-gold22').value);
+      state.rates.silver1g = Number(document.getElementById('edit-silver1').value);
+      state.rates.diamond1ct = Number(document.getElementById('edit-diamond1').value);
+      saveState();
+      alert('Rates published to client store!');
+      render();
+    };
+
+    window.saveUpi = function() {
+      state.upi.id = document.getElementById('edit-upi-id').value;
+      state.upi.freeShipINR = Number(document.getElementById('edit-upi-freeship').value);
+      saveState();
+      alert('UPI settings saved!');
+      render();
+    };
+
+    // Initial render on boot
+    window.addEventListener('DOMContentLoaded', render);
+    render();
+  </script>
+</body>
+</html>
